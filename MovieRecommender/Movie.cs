@@ -16,8 +16,10 @@ namespace MovieRecommender
         [Index(4)]
         public string Cast { get; set; }
         [Index(5)]
-        public string WikiPage { get; set; }
+        public string Genre { get; set; }
         [Index(6)]
+        public string WikiPage { get; set; }
+        [Index(7)]
         public string Plot { get; set; }
     }
 }
