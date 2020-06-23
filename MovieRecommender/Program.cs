@@ -12,23 +12,28 @@ namespace MovieRecommender
     {
         private static void Main(string[] args)
         {
-            var movies = GetMovies();
-            var moviePlotVectorizers = movies.Select(movie => 
+            var path = "C:/Users/rickh/Desktop/wiki_movie_plots_deduped.csv";
+            var movieRepository = new MovieRepository(path);
+
+            var movies = movieRepository.GetMovies();
+            //var moviePlotVectorizers = movies.Select(movie => 
+            //{
+            //    var words = SplitWords(movie.Plot);
+            //    return TfidfVectorizer(words);
+            //});
+
+            //Console.WriteLine(moviePlotVectorizers.Count());
+            //Console.WriteLine("Done!");
+
+            var movie = movieRepository.GetMovieByTitle(movies, "Interstellar");
+            if (movie != null)
             {
-                var words = SplitWords(movie.Plot);
-                return TfidfVectorizer(words);
-            });
-
-            Console.WriteLine(moviePlotVectorizers.Count());
-            Console.WriteLine("Done!");
-        }
-
-        private static List<Movie> GetMovies()
-        {
-            using var streamReader = new StreamReader("C:/Users/rickh/Desktop/wiki_movie_plots_deduped.csv");
-            using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-
-            return csvReader.GetRecords<Movie>().ToList();
+                Console.WriteLine(movie.Plot);
+            }
+            else
+            {
+                Console.WriteLine("Movie not found");
+            }
         }
 
         private static List<string> SplitWords(string words)
