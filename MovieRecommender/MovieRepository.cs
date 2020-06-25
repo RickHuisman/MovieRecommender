@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace MovieRecommender
 {
+    // TODO Convert to singleton
     public class MovieRepository
     {
         private List<Movie> Movies { get; }
@@ -25,9 +25,16 @@ namespace MovieRecommender
             return Movies;
         }
 
-        public Movie GetMovieByTitle(List<Movie> movies, string title)
+        public Movie GetMovieByTitle(string title)
         {
-            return movies.Find(movie => movie.Title.Equals(title));
+            return Movies.Find(movie => movie.Title.Equals(title));
+        }
+
+        public Movie GetRandomMovie()
+        {
+            var rand = new Random();
+
+            return Movies[rand.Next(Movies.Count())];
         }
     }
 }

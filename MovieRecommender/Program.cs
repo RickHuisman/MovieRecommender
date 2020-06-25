@@ -1,67 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using CsvHelper;
 
 namespace MovieRecommender
 {
-    class Program
+    public static class Program
     {
         private static void Main(string[] args)
         {
-            var path = "C:/Users/rickh/Desktop/wiki_movie_plots_deduped.csv";
-            var movieRepository = new MovieRepository(path);
-
-            var movies = movieRepository.GetMovies();
-            //var moviePlotVectorizers = movies.Select(movie => 
-            //{
-            //    var words = SplitWords(movie.Plot);
-            //    return TfidfVectorizer(words);
-            //});
-
-            //Console.WriteLine(moviePlotVectorizers.Count());
-            //Console.WriteLine("Done!");
-
-            var movie = movieRepository.GetMovieByTitle(movies, "Interstellar");
-            if (movie != null)
+            var recommendations = MovieRecommender.RecommendBasedOf("Dunkirk");
+            foreach (var recommendation in recommendations)
             {
-                Console.WriteLine(movie.Plot);
-            }
-            else
-            {
-                Console.WriteLine("Movie not found");
+                Console.WriteLine(recommendation.Title);
             }
         }
 
-        private static List<string> SplitWords(string words)
+        private static Dictionary<string, int> VectorizeMoviePlot(Movie movie)
         {
-            var newWords = words.Split().ToList();
-
-            return newWords;
-        }
-
-        private static Dictionary<string, int> TfidfVectorizer(List<string> words)
-        {
-            Dictionary<string, int> vectorizer = new Dictionary<string, int>();
-
-            foreach (var word in words)
-            {
-                // Check if word is already added to vectorizer
-                if (!vectorizer.ContainsKey(word))
-                {
-                    vectorizer.Add(word, 1);
-                }
-                else
-                {
-                    // += 1
-                    vectorizer[word] = vectorizer[word] += 1;
-                }
-            }
-
-            return vectorizer;
+            var words = TfidfVectorizer.SplitWords(movie.Plot);
+            return TfidfVectorizer.Vectorize(words);
         }
     }
 }
